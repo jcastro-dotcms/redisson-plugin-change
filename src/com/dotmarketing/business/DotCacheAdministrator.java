@@ -50,8 +50,9 @@ public interface DotCacheAdministrator  {
 	/**
 	 * Flushes all items that belong to the specified group on the local server only
 	 * @param group
+	 * @param ignoreDistributed 
 	 */
-	void flushGroupLocalOnly ( String group );
+	void flushGroupLocalOnly ( String group, boolean ignoreDistributed );
 	
 	/**
 	 * Get an object from the cache
@@ -79,8 +80,9 @@ public interface DotCacheAdministrator  {
 	/**
 	 * Remove an object from the cache on the local server only
 	 * @param key
+	 * @param ignoreDistributed 
 	 */
-	void removeLocalOnly ( String key, String group );
+	void removeLocalOnly ( String key, String group, boolean ignoreDistributed );
 	
 	/**
 	 * Should be called on shutdown of the dotcms

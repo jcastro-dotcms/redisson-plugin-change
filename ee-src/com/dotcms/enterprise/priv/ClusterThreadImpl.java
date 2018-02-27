@@ -88,10 +88,10 @@ public class ClusterThreadImpl extends Thread implements ClusterThread  {
 						}else if(group.equals(menuGroup)){
 							flushMenus = true;
 						}else{
-							CacheLocator.getCacheAdministrator().flushGroupLocalOnly(group);
+							CacheLocator.getCacheAdministrator().flushGroupLocalOnly(group, true);
 						}
 					}else{
-						CacheLocator.getCacheAdministrator().removeLocalOnly(key, group);
+						CacheLocator.getCacheAdministrator().removeLocalOnly(key, group, true);
 					}
 				}else{
 					Logger.error(this, "The cache to locally remove key is invalid. The value was " + string);
@@ -100,7 +100,7 @@ public class ClusterThreadImpl extends Thread implements ClusterThread  {
     		HibernateUtil.commitTransaction();
     		if(flushMenus){
     			RefreshMenus.deleteMenusOnFileSystemOnly();
-    			CacheLocator.getCacheAdministrator().flushGroupLocalOnly(menuGroup);
+    			CacheLocator.getCacheAdministrator().flushGroupLocalOnly(menuGroup, true);
     		}
     	}
     	catch (Exception e) 

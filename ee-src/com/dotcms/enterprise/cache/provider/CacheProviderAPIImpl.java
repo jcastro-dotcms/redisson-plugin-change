@@ -27,6 +27,7 @@ public class CacheProviderAPIImpl implements CacheProviderAPI, CacheOSGIService 
 
     private static String defaultProvidersNoLicense;//Default providers with not ee lincense
     private static String defaultProviders;//Default providers with license
+    private static final String REDISSON_PROVIDER_NAME = "Redisson Pro";
 
     private final Map<String, List<String>> configuredChainsPerRegion;//List of registered providers per region
     private final Map<String, CacheProvider> providersClasses;//List of ALL the registered providers
@@ -365,7 +366,7 @@ public class CacheProviderAPIImpl implements CacheProviderAPI, CacheOSGIService 
     }
 
     @Override
-    public void remove ( String group, String key ) {
+    public void remove ( String group, String key, boolean ignoreDistributed ) {
 
         //Getting the list of cache providers to use for the given region
         List<CacheProvider> providersToUse = getProvidersForRegion(group);
@@ -373,7 +374,9 @@ public class CacheProviderAPIImpl implements CacheProviderAPI, CacheOSGIService 
         for ( CacheProvider provider : providersToUse ) {
 
             try {
-                provider.remove(group, key);
+            	if (!(ignoreDistributed && REDISSON_PROVIDER_NAME.equalsIgnoreCase(provider.getName()))) {
+            		provider.remove(group, key);
+            	}
             } catch ( Exception e ) {
                 //On Error we don't want to stop the execution of the other providers
                 Logger.error(this.getClass(), "Error removing record from CacheProvider [" + provider.getName() + "]: group [" + group + "] - key [" + key + "].", e);
@@ -382,7 +385,7 @@ public class CacheProviderAPIImpl implements CacheProviderAPI, CacheOSGIService 
     }
 
     @Override
-    public void remove ( String group ) {
+    public void remove ( String group, boolean ignoreDistributed ) {
 
         //Getting the list of cache providers to use for the given region
         List<CacheProvider> providersToUse = getProvidersForRegion(group);
@@ -390,7 +393,9 @@ public class CacheProviderAPIImpl implements CacheProviderAPI, CacheOSGIService 
         for ( CacheProvider provider : providersToUse ) {
 
             try {
-                provider.remove(group);
+            	if (!(ignoreDistributed && REDISSON_PROVIDER_NAME.equalsIgnoreCase(provider.getName()))) {
+            		provider.remove(group);
+            	}
             } catch ( Exception e ) {
                 //On Error we don't want to stop the execution of the other providers
                 Logger.error(this.getClass(), "Error removing group from CacheProvider [" + provider.getName() + "]: group [" + group + "].", e);

@@ -72,7 +72,7 @@ public interface CacheProviderAPI {
      *
      * @param group
      */
-    void remove ( String group );
+    void remove ( String group, boolean ignoreDistributed );
 
     /**
      * Invalidates a given key for a given region in all the registered Cache Providers
@@ -80,7 +80,7 @@ public interface CacheProviderAPI {
      * @param group
      * @param key
      */
-    void remove ( String group, String key );
+    void remove ( String group, String key, boolean ignoreDistributed );
 
     /**
      * Invalidates all the regions in all the registered Cache Providers

@@ -241,11 +241,11 @@ public class JGroupsCacheTransport extends ReceiverAdapter implements CacheTrans
                     } else if ( group.equalsIgnoreCase(menuGroup) ) {
                         flushMenus = true;
                     } else {
-                        CacheLocator.getCacheAdministrator().flushGroupLocalOnly(group);
+                        CacheLocator.getCacheAdministrator().flushGroupLocalOnly(group, true);
                     }
 
                 } else {
-                    CacheLocator.getCacheAdministrator().removeLocalOnly(key, group);
+                    CacheLocator.getCacheAdministrator().removeLocalOnly(key, group, true);
                 }
             }
         } else {
@@ -254,7 +254,7 @@ public class JGroupsCacheTransport extends ReceiverAdapter implements CacheTrans
 
         if ( flushMenus ) {
             RefreshMenus.deleteMenusOnFileSystemOnly();
-            CacheLocator.getCacheAdministrator().flushGroupLocalOnly(menuGroup);
+            CacheLocator.getCacheAdministrator().flushGroupLocalOnly(menuGroup, true);
         }
 
     }

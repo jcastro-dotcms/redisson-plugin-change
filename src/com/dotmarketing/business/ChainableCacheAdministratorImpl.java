@@ -262,7 +262,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 		}
 		group = group.toLowerCase();
 
-		flushGroupLocalOnly(group);
+		flushGroupLocalOnly(group, false);
 
 		try {
 			if (Config.getBooleanProperty("CACHE_CLUSTER_THROUGH_DB", false)) {
@@ -287,7 +287,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 		cacheProviderAPI.removeAll();
 	}
 
-	public void flushGroupLocalOnly ( String group ) {
+	public void flushGroupLocalOnly ( String group, boolean ignoreDistributed ) {
 
 		if ( group == null ) {
 			return;
@@ -296,7 +296,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 		group = group.toLowerCase();
 
 		//Invalidates the Cache for the given group
-		cacheProviderAPI.remove(group);
+		cacheProviderAPI.remove(group, ignoreDistributed);
 	}
 
 	public Object get ( String key, String group ) throws DotCacheException {
@@ -349,7 +349,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 
 				String k = key.toLowerCase();
 				String g = group.toLowerCase();
-				removeLocalOnly(k, g);
+				removeLocalOnly(k, g, false);
 
 				try {
 					if (Config.getBooleanProperty("CACHE_CLUSTER_THROUGH_DB", false)) {
@@ -384,7 +384,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 		cacheRemoveRunnable.run();
 	}
 
-	public void removeLocalOnly ( final String key, final String group ) {
+	public void removeLocalOnly ( final String key, final String group, boolean ignoreDistributed ) {
 
 		if ( key == null || group == null ) {
 			return;
@@ -393,7 +393,7 @@ public class ChainableCacheAdministratorImpl implements DotCacheAdministrator {
 		Runnable cacheRemoveRunnable = new Runnable() {
 			public void run () {
 				//Invalidates from Cache a key from a given group
-				cacheProviderAPI.remove(group, key);
+				cacheProviderAPI.remove(group, key, ignoreDistributed);
 			}
 		};
 		cacheRemoveRunnable.run();
